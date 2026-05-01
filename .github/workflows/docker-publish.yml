@@ -1,10 +1,17 @@
 name: Docker Publish
 
-# Publishes a multi-arch Docker image to GitHub Container Registry (ghcr.io):
-#   ghcr.io/qubitonhq/qubiton-stripe-dispute-evidence:latest    (on push to main)
-#   ghcr.io/qubitonhq/qubiton-stripe-dispute-evidence:main      (on push to main)
-#   ghcr.io/qubitonhq/qubiton-stripe-dispute-evidence:main-<sha> (on push to main)
-#   ghcr.io/qubitonhq/qubiton-stripe-dispute-evidence:vX.Y.Z    (on tag push v*)
+# Publishes a multi-arch Docker image to GitHub Container Registry (ghcr.io).
+#
+# Tag scheme:
+#   On push to main:
+#     :latest                          (always points to head of main)
+#     :main                            (same)
+#     :main-<sha>                      (pinned to a specific commit)
+#   On push of a v* tag (e.g. v1.2.3):
+#     :1.2.3                           (full semver)
+#     :1.2                             (minor)
+#     :1                               (major)
+#     :v1.2.3                          (full ref, with v prefix)
 #
 # No external secrets needed — uses the built-in GITHUB_TOKEN with packages:write.
 
@@ -48,9 +55,16 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
+            # Branch push (only main is in `on:` filter): :main
             type=ref,event=branch
+            # Tag push v1.2.3 → :1.2.3, :1.2, :1, :v1.2.3 (full ref)
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
             type=ref,event=tag
+            # Pin-to-commit on main: :main-<short-sha>
             type=sha,prefix=main-,enable=${{ github.ref == 'refs/heads/main' }}
+            # Floating :latest only on main
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
           labels: |
             org.opencontainers.image.title=qubiton-stripe-dispute-evidence

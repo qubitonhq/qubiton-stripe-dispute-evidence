@@ -34,11 +34,17 @@ docker run --rm -p 3000:3000 \
   ghcr.io/qubitonhq/qubiton-stripe-dispute-evidence:latest
 ```
 
-Available tags:
+Available tags (pick the one that matches your update tolerance):
 
-- `latest` — head of `main`
-- `main` / `main-<sha>` — same, but pinned to a specific commit
-- `vX.Y.Z` — published from a release tag
+| Tag | Points to | Use when |
+|---|---|---|
+| `:latest` | head of `main` (moves) | local dev, hacking |
+| `:main` | same as `:latest` | same |
+| `:main-<sha>` | a specific commit on `main` | reproducible CI builds against a non-released snapshot |
+| `:0.1.0` (or any `:X.Y.Z`) | the exact release tag — **immutable** | **production — pin here** |
+| `:0.1` (or any `:X.Y`) | latest patch in that minor | want auto-patch updates, no minor bumps |
+| `:0` (or any `:X`) | latest minor + patch in that major | want auto-minor + patch, no major bumps |
+| `:v0.1.0` (full ref) | same as `:0.1.0` | for tooling that prefers the `v`-prefix form |
 
 The image is **public** — no auth needed to pull.
 
