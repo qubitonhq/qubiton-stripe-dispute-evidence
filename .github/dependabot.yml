@@ -1,0 +1,50 @@
+version: 2
+updates:
+  # npm dependencies
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '09:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+    groups:
+      # Bundle non-breaking dev-tool bumps to keep PR noise down.
+      dev-dependencies:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+      # Production runtime patches grouped — minor/major still come as
+      # separate PRs so they get individual review.
+      runtime-patch:
+        dependency-type: production
+        update-types:
+          - patch
+
+  # GitHub Actions workflow dependencies
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '09:00'
+      timezone: Etc/UTC
+    labels:
+      - dependencies
+      - github-actions
+
+  # Dockerfile base images
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '09:00'
+      timezone: Etc/UTC
+    labels:
+      - dependencies
+      - docker
