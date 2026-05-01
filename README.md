@@ -1,6 +1,7 @@
 # qubiton-stripe-dispute-evidence
 
 [![CI](https://github.com/qubitonhq/qubiton-stripe-dispute-evidence/actions/workflows/ci.yml/badge.svg)](https://github.com/qubitonhq/qubiton-stripe-dispute-evidence/actions/workflows/ci.yml)
+[![Docker](https://img.shields.io/badge/ghcr.io-qubiton--stripe--dispute--evidence-blue?logo=docker)](https://github.com/qubitonhq/qubiton-stripe-dispute-evidence/pkgs/container/qubiton-stripe-dispute-evidence)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 
@@ -21,6 +22,28 @@ When Stripe fires `charge.dispute.created`, this server fans out four parallel c
 
 ## Quickstart
 
+### Option A — Docker (no clone needed)
+
+Pull the prebuilt multi-arch image (linux/amd64 + linux/arm64) from GitHub Container Registry:
+
+```bash
+docker run --rm -p 3000:3000 \
+  -e STRIPE_SECRET_KEY=sk_test_... \
+  -e STRIPE_WEBHOOK_SECRET=whsec_... \
+  -e QUBITON_API_KEY=svm... \
+  ghcr.io/qubitonhq/qubiton-stripe-dispute-evidence:latest
+```
+
+Available tags:
+
+- `latest` — head of `main`
+- `main` / `main-<sha>` — same, but pinned to a specific commit
+- `vX.Y.Z` — published from a release tag
+
+The image is **public** — no auth needed to pull.
+
+### Option B — clone and run
+
 ```bash
 git clone https://github.com/qubitonhq/qubiton-stripe-dispute-evidence.git
 cd qubiton-stripe-dispute-evidence
@@ -30,7 +53,7 @@ cp .env.example .env
 npm run dev
 ```
 
-In a second terminal:
+In a second terminal (either option):
 
 ```bash
 stripe login                      # test-mode account, not live!

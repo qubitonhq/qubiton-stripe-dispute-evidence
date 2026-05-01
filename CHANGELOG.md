@@ -6,6 +6,14 @@ follows [SemVer](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- **Docker image** published to `ghcr.io/qubitonhq/qubiton-stripe-dispute-evidence`
+  on every push to `main` and on `v*` tag pushes. Multi-arch
+  (`linux/amd64` + `linux/arm64`), public, with build-provenance attestation
+  and SBOM. Tags: `latest`, `main`, `main-<sha>`, and `vX.Y.Z`.
+- README quickstart now leads with `docker run ghcr.io/qubitonhq/...:latest`
+  for users who want to skip the clone-and-install path.
+
 ### Changed
 - Bumped `@qubiton/sdk` to `^1.1.1` (was `^1.1.0`). Picks up the build-tooling
   refresh from qubitonhq/qubiton-node v1.1.1 — TypeScript 6, vitest 4, native
