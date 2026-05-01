@@ -24,7 +24,8 @@ on:
 permissions:
   contents: read
   packages: write
-  id-token: write   # for image attestation
+  id-token: write       # OIDC token for signing
+  attestations: write   # for actions/attest-build-provenance
 
 env:
   REGISTRY: ghcr.io
